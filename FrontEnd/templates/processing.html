@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+<br />
+<br />
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<h2>{{display_data.title}}</h2>
+		</div>
+		<div class="col-md-6">
+			<img class="img-responsive" height="60%" width="60%" src="{{display_data.thumbnail}}" alt="">
+		</div>
+	</div>
+	<div class="row" style="padding-top: 20px;">
+        <div class="col-md-12"
+    		<div id="processing">Processing request</div>
+    		<div id="cdn_url" style="display:none;"><a class="btn btn-primary" href="https://served.grabthataudio.com/grabthataudio/{{display_data.title}}.mp3" role="button">Download</a></div>
+        </div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+$(function ()
+{
+    var cdnElement = $("#cdn_url");
+
+    // this function will run each 1000 ms until stopped with clearInterval()
+    var i = setInterval(function ()
+    {
+        $.ajax(
+        {
+        	url: "/poll/{{display_data.poll|safe}}",
+    		dataType: 'json',
+            success: function (json)
+            {
+                // cdnElement from 1-100
+                //cdnElement.text('Processing');
+                //console.log('Response ' + json.ready);
+                // when the worker process is done (reached 100%), stop execution
+                if (json.ready == true){
+                	clearInterval(i);
+                	$("#cdn_url").show();
+                	$("#processing").hide();
+                }
+            },
+
+            error: function ()
+            {
+                // on error, stop execution
+                clearInterval(i);
+            }
+        });
+    }, 1000);
+});
+</script>
+{% endblock content %}

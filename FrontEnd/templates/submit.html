@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<br />
+<div class="container-fluid">
+		{% with messages = get_flashed_messages() %}
+  			{% if messages %}
+		<div class="row">
+			<div class="col-lg-8 offset-lg-2">
+			    {% for message in messages %}
+			      <div class="alert alert-danger alert-dismissible fade in" role="alert">
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					  </button>
+  					{{ message }}
+  				 </div>
+			    {% endfor %}
+			    </ul>
+			</div>
+		</div>
+			{% endif %}
+		{% endwith %}
+	<div class="row">
+		<div class="col-lg-8 offset-lg-2">
+			<form action="/process" method="POST">
+				<div class="form-group">
+				 	<label for="YTURLInput">Youtube URL</label>
+				    <input type="url" class="form-control" id="YTURL" name="youtube_url" aria-describedby="youtubeURL" placeholder="Enter Youtube URL">
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
